@@ -17,7 +17,6 @@ public class CalendarGridView extends GridView{
 	public CalendarGridView(Context context) {
 		super(context);
 		mContext = context;
-		
 		setGirdView();
 	}
 

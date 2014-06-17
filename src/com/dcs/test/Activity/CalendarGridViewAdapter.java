@@ -3,10 +3,15 @@ package com.dcs.test.Activity;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Random;
+
+
 
 import com.dcs.test.R;
+
 import android.app.Activity;
 import android.content.res.Resources;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -100,6 +105,7 @@ public class CalendarGridViewAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
+//		Log.d("--CalendarGridViewAdapter getView --", "position=="+position);
 		LinearLayout iv = new LinearLayout(activity);
 		iv.setId(position + 5000);
 		LinearLayout imageLayout = new LinearLayout(activity);
@@ -114,8 +120,10 @@ public class CalendarGridViewAdapter extends BaseAdapter {
 
 		final int iMonth = calCalendar.get(Calendar.MONTH);
 		final int iDay = calCalendar.get(Calendar.DAY_OF_WEEK);
+//		int nowDay=calCalendar.get(Calendar.DATE);
+//		Log.d("--CalendarGridViewAdapter getView --", "nowDay=="+nowDay);
+		
 
-	
 		// 判断周六周日
 		iv.setBackgroundColor(resources.getColor(R.color.white));
 		if (iDay == 7) {
@@ -133,13 +141,20 @@ public class CalendarGridViewAdapter extends BaseAdapter {
 		txtToDay.setGravity(Gravity.CENTER_HORIZONTAL);
 		txtToDay.setTextSize(9);
 		//TODO_Q  加标记
+//		txtToDay.setText((int)(Math.random()*10)+"");
 		
-//		txtDay=
+		long quot = 0;
+		quot=calCalendar.getTimeInMillis();
+		quot = quot / 1000 / 60 / 60 / 24;
+//		System.out.println("quot is:"+quot);
+		String[] names={"是集会","差四天","差三天","差两天","差一天"};
+		int firstName=(int) (quot%names.length)+1;
+		txtToDay.setText(names[(firstName++)%names.length]);
 		
 		if (equalsDate(calToday.getTime(), myDate)) {
 			// 当前日期
 			iv.setBackgroundColor(resources.getColor(R.color.event_center));
-			txtToDay.setText("TODAY!");
+//			txtToDay.setText("TODAY!");
 		}
 		
 

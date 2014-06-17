@@ -458,6 +458,7 @@ public class BaseCalendar extends Activity implements OnTouchListener {
 		return calStartDate;
 	}
 
+	/**标题栏的adapter*/
 	public class TitleGridAdapter extends BaseAdapter {
 
 		int[] titles = new int[] { R.string.Sun, R.string.Mon, R.string.Tue,
