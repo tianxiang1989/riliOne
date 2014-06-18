@@ -33,6 +33,7 @@ import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 import android.widget.LinearLayout.LayoutParams;
 
@@ -137,23 +138,29 @@ public class BaseCalendar extends Activity implements OnTouchListener {
 	// 基本变量
 	private Context mContext = BaseCalendar.this;
 	private GridView title_gView;
-	private GridView gView1;// 上一个月
-	private GridView gView2;// 当前月
-	private GridView gView3;// 下一个月
+	/**上一个月*/
+	private GridView gView1;
+	/**当前月*/
+	private GridView gView2;
+	/**下一个月*/
+	private GridView gView3;
 	// private GridView gView1;
-	boolean bIsSelection = false;// 是否是选择事件发生
-	private Calendar calStartDate = Calendar.getInstance();// 当前显示的日历
-	private Calendar calSelected = Calendar.getInstance(); // 选择的日历
-	private Calendar calToday = Calendar.getInstance(); // 今日
+	/**是否是选择事件发生*/
+	boolean bIsSelection = false; 
+	/**当前显示的日历*/
+	private Calendar calStartDate = Calendar.getInstance();
+	/**选择的日历*/
+	private Calendar calSelected = Calendar.getInstance(); 
+	/**今日*/
+	private Calendar calToday = Calendar.getInstance(); 
 	private CalendarGridViewAdapter gAdapter;
 	private CalendarGridViewAdapter gAdapter1;
 	private CalendarGridViewAdapter gAdapter3;
-	// 顶部按钮
+	/**顶部年月按钮*/
 	private Button btnToday = null;
 	private RelativeLayout mainLayout;
-
-	//
-	private int iMonthViewCurrentMonth = 0; // 当前视图月
+	/**当前视图月*/
+	private int iMonthViewCurrentMonth = 0; // 
 	private int iMonthViewCurrentYear = 0; // 当前视图年
 	private int iFirstDayOfWeek = Calendar.MONDAY;
 
@@ -276,7 +283,7 @@ public class BaseCalendar extends Activity implements OnTouchListener {
 				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 		lp.leftMargin = 20;
 		btnToday.setLayoutParams(lp);
-		btnToday.setTextSize(25);
+		btnToday.setTextSize(65);
 		btnToday.setBackgroundResource(Color.TRANSPARENT);//
 		// btn_cal.setBackgroundResource(R.drawable.editbox_background_normal);//
 		// 设置当前月按钮的背景颜色为按钮默认颜色
@@ -284,6 +291,8 @@ public class BaseCalendar extends Activity implements OnTouchListener {
 		// 当前月的点击事件的监听
 		btnToday.setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View arg0) {
+//				Toast.makeText(BaseCalendar.this, "点击btnToday了",
+//						Toast.LENGTH_SHORT).show();
 				setToDayViewItem();
 			}
 		});
@@ -391,12 +400,21 @@ public class BaseCalendar extends Activity implements OnTouchListener {
 
 	// 当月
 	private void setToDayViewItem() {
-
+		Toast.makeText(BaseCalendar.this, "进入setToDayViewItem了",
+				Toast.LENGTH_SHORT).show();
+		calStartDate = Calendar.getInstance();
+		//复位当前年月
+		iMonthViewCurrentMonth = calStartDate.get(Calendar.MONTH);
+		iMonthViewCurrentYear=calStartDate.get(Calendar.YEAR);
 		calSelected.setTimeInMillis(calToday.getTimeInMillis());
 		calSelected.setFirstDayOfWeek(iFirstDayOfWeek);
 		calStartDate.setTimeInMillis(calToday.getTimeInMillis());
 		calStartDate.setFirstDayOfWeek(iFirstDayOfWeek);
-
+		
+		//尼玛不知道怎么刷新啊...
+		viewFlipper.showPrevious();
+		viewFlipper.showNext();
+		
 	}
 
 	// 下一个月
@@ -512,11 +530,8 @@ public class BaseCalendar extends Activity implements OnTouchListener {
 			} else {
 
 			}
-
 			txtDay.setText((Integer) getItem(position));
-
 			iv.addView(txtDay, lp);
-
 			return iv;
 		}
 	}

@@ -5,8 +5,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
-
-
 import com.dcs.test.R;
 
 import android.app.Activity;
@@ -21,17 +19,18 @@ import android.widget.TextView;
 import android.widget.LinearLayout.LayoutParams;
 
 public class CalendarGridViewAdapter extends BaseAdapter {
+	/**当前显示的日历*/
+	private Calendar calStartDate = Calendar.getInstance();
+	/**选择的日历*/
+	private Calendar calSelected = Calendar.getInstance();
 
-	private Calendar calStartDate = Calendar.getInstance();// 当前显示的日历
-	private Calendar calSelected = Calendar.getInstance(); // 选择的日历
-	
-	public void setSelectedDate(Calendar cal)
-	{
-		calSelected=cal;
+	public void setSelectedDate(Calendar cal) {
+		calSelected = cal;
 	}
-	
+
 	private Calendar calToday = Calendar.getInstance(); // 今日
 	private int iMonthViewCurrentMonth = 0; // 当前视图月
+
 	// 根据改变的日期更新日历
 	// 填充日历控件用
 	private void UpdateStartDateForMonth() {
@@ -57,7 +56,9 @@ public class CalendarGridViewAdapter extends BaseAdapter {
 		calStartDate.add(Calendar.DAY_OF_MONTH, -1);// 周日第一位
 
 	}
+
 	ArrayList<java.util.Date> titles;
+
 	private ArrayList<java.util.Date> getDates() {
 
 		UpdateStartDateForMonth();
@@ -74,19 +75,19 @@ public class CalendarGridViewAdapter extends BaseAdapter {
 
 	private Activity activity;
 	Resources resources;
+
 	// construct
-	public CalendarGridViewAdapter(Activity a,Calendar cal) {
-		calStartDate=cal;
+	public CalendarGridViewAdapter(Activity a, Calendar cal) {
+		calStartDate = cal;
 		activity = a;
-		resources=activity.getResources();
+		resources = activity.getResources();
 		titles = getDates();
 	}
-	
+
 	public CalendarGridViewAdapter(Activity a) {
 		activity = a;
-		resources=activity.getResources();
+		resources = activity.getResources();
 	}
-
 
 	@Override
 	public int getCount() {
@@ -105,7 +106,7 @@ public class CalendarGridViewAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-//		Log.d("--CalendarGridViewAdapter getView --", "position=="+position);
+		// Log.d("--CalendarGridViewAdapter getView --", "position=="+position);
 		LinearLayout iv = new LinearLayout(activity);
 		iv.setId(position + 5000);
 		LinearLayout imageLayout = new LinearLayout(activity);
@@ -120,9 +121,8 @@ public class CalendarGridViewAdapter extends BaseAdapter {
 
 		final int iMonth = calCalendar.get(Calendar.MONTH);
 		final int iDay = calCalendar.get(Calendar.DAY_OF_WEEK);
-//		int nowDay=calCalendar.get(Calendar.DATE);
-//		Log.d("--CalendarGridViewAdapter getView --", "nowDay=="+nowDay);
-		
+		// int nowDay=calCalendar.get(Calendar.DATE);
+		// Log.d("--CalendarGridViewAdapter getView --", "nowDay=="+nowDay);
 
 		// 判断周六周日
 		iv.setBackgroundColor(resources.getColor(R.color.white));
@@ -140,23 +140,19 @@ public class CalendarGridViewAdapter extends BaseAdapter {
 		TextView txtToDay = new TextView(activity);// 日本老黄历
 		txtToDay.setGravity(Gravity.CENTER_HORIZONTAL);
 		txtToDay.setTextSize(9);
-		//TODO_Q  加标记
-//		txtToDay.setText((int)(Math.random()*10)+"");
-		
+		// 日期下面加自己定义的标识
 		long quot = 0;
-		quot=calCalendar.getTimeInMillis();
+		quot = calCalendar.getTimeInMillis();
 		quot = quot / 1000 / 60 / 60 / 24;
-//		System.out.println("quot is:"+quot);
-		String[] names={"是集会","差四天","差三天","差两天","差一天"};
-		int firstName=(int) (quot%names.length)+1;
-		txtToDay.setText(names[(firstName++)%names.length]);
-		
+		String[] names = { "是集会", "差四天", "差三天", "差两天", "差一天" };
+		int firstName = (int) (quot % names.length) + 1;
+		txtToDay.setText(names[(firstName++) % names.length]);
+
 		if (equalsDate(calToday.getTime(), myDate)) {
 			// 当前日期
 			iv.setBackgroundColor(resources.getColor(R.color.event_center));
-//			txtToDay.setText("TODAY!");
+			// txtToDay.setText("TODAY!");
 		}
-		
 
 		// 设置背景颜色
 		if (equalsDate(calSelected.getTime(), myDate)) {
@@ -165,7 +161,8 @@ public class CalendarGridViewAdapter extends BaseAdapter {
 		} else {
 			if (equalsDate(calToday.getTime(), myDate)) {
 				// 当前日期
-				iv.setBackgroundColor(resources.getColor(R.color.calendar_zhe_day));
+				iv.setBackgroundColor(resources
+						.getColor(R.color.calendar_zhe_day));
 			}
 		}
 		// 设置背景颜色结束
@@ -206,6 +203,7 @@ public class CalendarGridViewAdapter extends BaseAdapter {
 		super.notifyDataSetChanged();
 	}
 
+	/**比较两个日期是否为同一天*/
 	private Boolean equalsDate(Date date1, Date date2) {
 
 		if (date1.getYear() == date2.getYear()
